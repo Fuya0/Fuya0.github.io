@@ -8,9 +8,15 @@
       <link href="/2026/04/27/%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A01%E2%80%94%E2%80%94%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E4%B8%8E%E5%BC%82%E6%AD%A5/"/>
       <url>/2026/04/27/%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A01%E2%80%94%E2%80%94%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E4%B8%8E%E5%BC%82%E6%AD%A5/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<blockquote><p>事件循环、单线程、异步与计时器相关，面试八股整理笔记。</p></blockquote><h2 id="一、如何理解-JS-的异步"><a href="#一、如何理解-JS-的异步" class="headerlink" title="一、如何理解 JS 的异步"></a>一、如何理解 JS 的异步</h2><p><strong>问题</strong></p><ul><li>如何理解 JS 的异步？</li></ul><p><strong>参考答案</strong></p><ul><li><p><strong>单线程与主线程</strong><br>JS 运行在<strong>浏览器的渲染主线程</strong>上，该线程只有一个；要负责页面渲染、执行 JS 等。若全部用<strong>同步</strong>方式，主线程易阻塞，消息队列里很多任务跑不动：既浪费主线程时间，又导致页面难以及时更新，像「卡死」一样。</p></li><li><p><strong>为什么用异步</strong><br>对计时器、网络、事件监听等，主线程<strong>把活交给其他线程&#x2F;机制</strong>，自己立刻继续往下执行。其他线程完成后再把<strong>回调包装成任务</strong>，放进<strong>消息队列末尾</strong>排队，等主线程来调度。这样<strong>主线程不被长时间占住</strong>，单线程下仍能尽量保持流畅。</p></li></ul><hr><h2 id="二、事件循环"><a href="#二、事件循环" class="headerlink" title="二、事件循环"></a>二、事件循环</h2><p><strong>问题</strong></p><ul><li>阐述一下 JS 的「事件循环」。</li></ul><p><strong>参考答案</strong></p><ul><li><p><strong>别称</strong><br>事件循环 &#x3D; <strong>消息循环</strong>，描述的是<strong>渲染主线程</strong>的工作方式。</p></li><li><p><strong>在浏览器里的工作方式</strong><br>在 Chrome 源码中可理解为：有一个<strong>不结束的 for 循环</strong>，每轮从消息队列里取<strong>一个任务</strong>执行，其他线程在合适时把新任务<strong>推到队列末尾</strong>。</p></li><li><p><strong>关于宏&#x2F;微任务</strong><br>过去常简单分成「宏队列、微队列」，在复杂实现里已<strong>不够</strong>；W3C 的表述是：不同<strong>类型</strong>任务对应<strong>不同队列</strong>，<strong>同类型</strong>必须在同一队列、不同类型可在不同队列；各队列有<strong>不同优先级</strong>，一次事件循环中由<strong>浏览器</strong>决定从哪个队列取任务，但须保证存在<strong>微任务队列</strong>且<strong>微任务具有最高优先级</strong>，要<strong>先调度、先执行</strong>。</p></li></ul><hr><h2 id="三、JS-中的计时器能做到精确计时吗"><a href="#三、JS-中的计时器能做到精确计时吗" class="headerlink" title="三、JS 中的计时器能做到精确计时吗"></a>三、JS 中的计时器能做到精确计时吗</h2><p><strong>问题</strong></p><ul><li>JS 中的计时器能不能精确计时？为什么？</li></ul><p><strong>参考答案</strong></p><ul><li><strong>不能</strong>，大致原因如下：</li></ul><ol><li>计算机<strong>没有原子钟</strong>一类硬件，本身做不到绝对精确。</li><li><strong>操作系统的计时函数</strong>就有偏差；JS 计时器最终<strong>调用 OS</strong>，会带上这些偏差。</li><li>按 <strong>W3C 标准</strong>，浏览器在实现计时器时，若<strong>嵌套层级超过 5 层</strong>，会带有 <strong>4ms 最低间隔</strong> 等规则，在期望间隔很短时也会带来额外偏差。</li><li><strong>受事件循环约束</strong>：回调只能在<strong>主线程空闲</strong>时执行，实际触发时刻还会被排队影响。</li></ol>]]></content>
       
       
+      
+        <tags>
+            
+            <tag> 学习笔记 </tag>
+            
+        </tags>
       
     </entry>
     
